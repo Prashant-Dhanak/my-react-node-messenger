@@ -7,6 +7,8 @@ const session = require("express-session");
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
 const db = require("./db");
 const { User } = require("./db/models");
+const cookieParser = require('cookie-parser')
+const csrf = require('csurf')
 // create store for sessions to persist in database
 const sessionStore = new SequelizeStore({ db });
 
@@ -19,8 +21,24 @@ app.use(json());
 app.use(urlencoded({ extended: false }));
 app.use(express.static(join(__dirname, "public")));
 
+app.use(cookieParser())
+app.use(session({secret: process.env.SESSION_SECRET}))
+// app.use(csrf({cookie:true}))
+
+const csrfProtection = csrf({
+  cookie: false
+});
+
+
+// Temp csrf fix
+app.get('/csrf-token',csrfProtection,(req, res) => {
+  const csrf = req.csrfToken()
+  console.log(csrf)
+  res.json({csrfToken: csrf});
+});
+
 app.use(function (req, res, next) {
-  const token = req.headers["x-access-token"];
+const token = req.cookies.token;
   if (token) {
     jwt.verify(token, process.env.SESSION_SECRET, (err, decoded) => {
       if (err) {
@@ -40,6 +58,16 @@ app.use(function (req, res, next) {
 
 // require api routes here after I create them
 app.use("/auth", require("./routes/auth"));
+
+app.use(csrfProtection);
+app.use(function (req, res){
+  if(req.sendNewToken){
+    res.json({
+      ...req.send,
+      // csrfToken: csrf
+    })
+  }
+})
 app.use("/api", require("./routes/api"));
 
 // catch 404 and forward to error handler
