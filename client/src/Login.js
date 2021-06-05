@@ -2,16 +2,44 @@ import React from "react";
 import { Redirect, useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import {
-  Grid,
+  Button,
   Box,
   Typography,
-  Button,
-  FormControl,
   TextField,
 } from "@material-ui/core";
+import { makeStyles } from '@material-ui/core/styles';
 import { login } from "./store/utils/thunkCreators";
+import SignTemplate from './SignTemplate'
+
+
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    margin: theme.spacing(8, 4),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  form: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
+    marginLeft: theme.spacing(10),
+    marginRight: theme.spacing(10),
+  },
+  submit: {
+    padding: "18px 36px",
+    margin: theme.spacing(3, 0, 2),
+    textAlign: "center",
+    backgroundColor: '#3A8DFF',
+    width: '50%',
+    fontFamily: 'sans-serif',
+  },
+  sansSerif: {
+    fontFamily: 'sans-serif',
+  },
+}));
 
 const Login = (props) => {
+  const classes = useStyles();
   const history = useHistory();
   const { user, login } = props;
 
@@ -28,41 +56,76 @@ const Login = (props) => {
   }
 
   return (
-    <Grid container justify="center">
-      <Box>
-        <Grid container item>
-          <Typography>Need to register?</Typography>
-          <Button onClick={() => history.push("/register")}>Register</Button>
-        </Grid>
-        <form onSubmit={handleLogin}>
-          <Grid>
-            <Grid>
-              <FormControl margin="normal" required>
-                <TextField
-                  aria-label="username"
-                  label="Username"
-                  name="username"
-                  type="text"
-                />
-              </FormControl>
-            </Grid>
-            <FormControl margin="normal" required>
-              <TextField
-                label="password"
-                aria-label="password"
-                type="password"
-                name="password"
-              />
-            </FormControl>
-            <Grid>
-              <Button type="submit" variant="contained" size="large">
-                Login
+<SignTemplate>
+        <div className={classes.paper}>
+          <Box width="75%" textAlign="right">
+            <Typography className={classes.sansSerif} >Don’t have an account?
+              <Button
+                style={{
+                  backgroundColor: "white",
+                  padding: "18px 36px",
+                  color: "#3A8DFF",
+                  margin: 20,
+                }}
+                className={classes.sansSerif}
+                variant="contained"
+                size="large"
+                onClick={() => history.push("/register")}>
+                Create Account
               </Button>
-            </Grid>
-          </Grid>
+            </Typography>
+          </Box>
+        </div>
+
+
+        <Box className={classes.form} width="75%" textAlign="left">
+          <Typography variant="h4" fontWeight="fontWeightBold" className={classes.sansSerif}>
+            Welcome back!
+          </Typography>
+
+        </Box>
+
+        <form onSubmit={handleLogin} className={classes.form}>
+
+          <Box width="75%">
+            <TextField
+              margin="normal"
+              required
+              aria-label="username"
+              label="Username"
+              fullWidth
+              autoFocus
+              name="username"
+              type="text"
+            />
+          </Box>
+          <Box width="75%">
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              label="password"
+              aria-label="password"
+              type="password"
+              name="password"
+            />
+
+          </Box>
+
+          <Box width="75%" textAlign="center">
+            <Button
+              type="submit"
+              variant="contained"
+              size="large"
+              fullWidth
+              color="primary"
+              className={classes.submit}>
+              Login
+              </Button>
+          </Box>
+
         </form>
-      </Box>
-    </Grid>
+</SignTemplate>
   );
 };
 
