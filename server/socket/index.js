@@ -6,7 +6,7 @@ const connection = function (io) {
 
     socket.on("go-online", id => goOnline(socket, id));
 
-    socket.on("new-message", (data) => newMessage(socket, data));
+    socket.on("new-message", (data) => newMessage(io, data));
 
     socket.on("logout", (id) => logout(socket, id));
 

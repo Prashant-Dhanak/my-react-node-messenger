@@ -1,2 +1,7 @@
 const onlineUsers = [];
-module.exports = onlineUsers;
+onlineUsersSocketID = []
+module.exports = 
+{
+    onlineUsers,
+    onlineUsersSocketID
+};
