@@ -29,11 +29,10 @@ router.post("/register", async (req, res, next) => {
 
     res.cookie('token', token, { httpOnly: true })
     req.send = { ...user.dataValues }
-    req.sendNewToken = true
-    // res.json({
-    //   ...user.dataValues,
-    //   // token,
-    // });
+    res.json({
+      ...user.dataValues,
+      // token,
+    });
     next()
   } catch (error) {
     if (error.name === "SequelizeUniqueConstraintError") {
@@ -71,12 +70,10 @@ router.post("/login", async (req, res, next) => {
       );
       res.cookie('token', token, { httpOnly: true })
       req.send = { ...user.dataValues }
-      req.sendNewToken = true
-      // res.json({
-      //   ...user.dataValues,
-      //   // token,
-      // });
-      next()
+      res.json({
+        ...user.dataValues,
+        // token,
+      });
     }
   } catch (error) {
     next(error);

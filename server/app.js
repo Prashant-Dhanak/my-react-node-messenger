@@ -36,6 +36,7 @@ app.get('/csrf-token',csrfProtection,(req, res) => {
   console.log(csrf)
   res.json({csrfToken: csrf});
 });
+app.use(csrfProtection);
 
 app.use(function (req, res, next) {
 const token = req.cookies.token;
@@ -57,16 +58,9 @@ const token = req.cookies.token;
 });
 
 // require api routes here after I create them
-app.use("/auth", require("./routes/auth"), csrf,function (req, res){
-    if(req.sendNewToken){
-      res.json({
-        ...req.send,
-        // csrfToken: csrf
-      })
-    }
-  });
+app.use("/auth", require("./routes/auth"));
 
-app.use(csrfProtection);
+
 app.use("/api", require("./routes/api"));
 
 // catch 404 and forward to error handler
