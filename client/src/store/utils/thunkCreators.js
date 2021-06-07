@@ -9,8 +9,8 @@ import {
 import { gotUser, setFetchingStatus } from "../user";
 
 axios.interceptors.request.use(async function (config) {
-  const csrfToken = await localStorage.getItem("csrf-token");
-  config.headers["X-CSRF-Token"] = csrfToken;
+  // const csrfToken = await localStorage.getItem("csrf-token");
+  // config.headers["X-CSRF-Token"] = csrfToken;
   return config;
 });
 
@@ -33,11 +33,6 @@ export const fetchUser = () => async (dispatch) => {
 
 export const register = (credentials) => async (dispatch) => {
   try {
-
-    const csrfdata  = await axios.get("/csrf-token");
-    await localStorage.setItem("csrf-token", csrfdata.data.csrfToken);
-    console.log(csrfdata)
-
     const { data } = await axios.post("/auth/register", credentials);
 
     dispatch(gotUser(data));
@@ -50,16 +45,9 @@ export const register = (credentials) => async (dispatch) => {
 
 export const login = (credentials) => async (dispatch) => {
   try {
-    
-    const csrfdata  = await axios.get("/csrf-token");
-    await localStorage.setItem("csrf-token", csrfdata.data.csrfToken);
-    
     const response = await axios.post("/auth/login", credentials);
     const data = response.data
-    // await localStorage.setItem("csrf-token", data.csrfToken);
 
-    console.log(response)
-    console.log(csrfdata)
     dispatch(gotUser(data));
     socket.emit("go-online", data.id);
   } catch (error) {

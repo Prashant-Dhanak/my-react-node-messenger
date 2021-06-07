@@ -22,24 +22,18 @@ app.use(urlencoded({ extended: false }));
 app.use(express.static(join(__dirname, "public")));
 
 app.use(cookieParser())
-app.use(session({secret: process.env.SESSION_SECRET}))
+app.use(session({ secret: process.env.SESSION_SECRET }))
 // app.use(csrf({cookie:true}))
 
 const csrfProtection = csrf({
-  cookie: false
+  cookie: true
 });
+module.exports = csrfProtection
 
-
-// Temp csrf fix
-app.get('/csrf-token',csrfProtection,(req, res) => {
-  const csrf = req.csrfToken()
-  console.log(csrf)
-  res.json({csrfToken: csrf});
-});
 app.use(csrfProtection);
 
 app.use(function (req, res, next) {
-const token = req.cookies.token;
+  const token = req.cookies.token;
   if (token) {
     jwt.verify(token, process.env.SESSION_SECRET, (err, decoded) => {
       if (err) {
@@ -57,6 +51,7 @@ const token = req.cookies.token;
   }
 });
 
+app.use(csrfProtection);
 // require api routes here after I create them
 app.use("/auth", require("./routes/auth"));
 
