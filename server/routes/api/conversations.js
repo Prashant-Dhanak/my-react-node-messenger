@@ -96,15 +96,13 @@ router.get("/", async (req, res, next) => {
 });
 
 router.post("/updateLastRead", async (req, res, next) => {
-  console.log(req.user.id)
   // Performs check that the request is validator, for security purpose.
   if (req.user.id === req.body.userId) {
     const update = Conversation.update(
       { lastRead: req.body.lastRead },
       { where: { id: req.body.conversationId } }
     )
-    console.log("It was posted")
-    res.json({})
+    res.json({"success": "true"})
   }
   else{
     res.json({"Error": "Forbidden"})
