@@ -23,11 +23,6 @@ const styles = {
 class Chat extends Component {
   handleClick = async (conversation) => {
     await this.props.setActiveChat(conversation.otherUser.username);
-  };
-
-  render() {
-    const { classes } = this.props;
-    const otherUser = this.props.conversation.otherUser;
     await this.props.updateLastRead({
       userId: this.props.user.id,
       recipientId: this.props.conversation.otherUser.id,
@@ -35,6 +30,12 @@ class Chat extends Component {
       conversationId: this.props.conversation.id,
       totalUnRead: this.props.conversation.totalUnRead
     })
+  };
+
+  render() {
+    const { classes } = this.props;
+    const otherUser = this.props.conversation.otherUser;
+    
     return (
       <Box
         onClick={() => this.handleClick(this.props.conversation)}
