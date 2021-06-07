@@ -1,13 +1,12 @@
 const router = require("express").Router();
 const { User } = require("../../db/models");
 const jwt = require("jsonwebtoken");
+const csrfProtection = require("../../app")
 
 router.post("/register", async (req, res, next) => {
   try {
     // expects {username, email, password} in req.body
     const { username, password, email } = req.body;
-    const csrf = req.csrfToken()
-    console.log(csrf)
 
     if (!username || !password || !email) {
       return res
@@ -33,7 +32,6 @@ router.post("/register", async (req, res, next) => {
     req.send = { ...user.dataValues }
     res.json({
       ...user.dataValues,
-      // token,
     });
     next()
   } catch (error) {
@@ -47,9 +45,6 @@ router.post("/register", async (req, res, next) => {
 
 router.post("/login", async (req, res, next) => {
   try {
-
-    const csrf = req.csrfToken()
-    console.log(csrf)
     // expects username and password in req.body
     const { username, password } = req.body;
     if (!username || !password)
@@ -77,7 +72,6 @@ router.post("/login", async (req, res, next) => {
       req.send = { ...user.dataValues }
       res.json({
         ...user.dataValues,
-        // token,
       });
     }
   } catch (error) {
@@ -101,6 +95,11 @@ router.get("/user", (req, res, next) => {
   } else {
     return res.json({});
   }
+});
+
+router.get('/csrf-token',csrfProtection,(req, res) => {
+  const csrf = req.csrfToken()
+  res.json({csrfToken: csrf});
 });
 
 module.exports = router;

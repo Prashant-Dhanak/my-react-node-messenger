@@ -9,8 +9,8 @@ import {
 import { gotUser, setFetchingStatus } from "../user";
 
 axios.interceptors.request.use(async function (config) {
-  // const csrfToken = await localStorage.getItem("csrf-token");
-  // config.headers["X-CSRF-Token"] = csrfToken;
+  const csrfToken = localStorage.getItem("csrf-token");
+  config.headers["X-CSRF-Token"] = csrfToken;
   return config;
 });
 
@@ -33,8 +33,9 @@ export const fetchUser = () => async (dispatch) => {
 
 export const register = (credentials) => async (dispatch) => {
   try {
+    const csrfdata  = await axios.get("/auth/csrf-token");
+    localStorage.setItem("csrf-token", csrfdata.data.csrfToken);
     const { data } = await axios.post("/auth/register", credentials);
-
     dispatch(gotUser(data));
     socket.emit("go-online", data.id);
   } catch (error) {
@@ -45,9 +46,10 @@ export const register = (credentials) => async (dispatch) => {
 
 export const login = (credentials) => async (dispatch) => {
   try {
+    const csrfdata  = await axios.get("/auth/csrf-token");
+    localStorage.setItem("csrf-token", csrfdata.data.csrfToken);
     const response = await axios.post("/auth/login", credentials);
     const data = response.data
-
     dispatch(gotUser(data));
     socket.emit("go-online", data.id);
   } catch (error) {
@@ -59,7 +61,7 @@ export const login = (credentials) => async (dispatch) => {
 export const logout = (id) => async (dispatch) => {
   try {
     await axios.delete("/auth/logout");
-    await localStorage.removeItem("csrf-token");
+    localStorage.removeItem("csrf-token");
     dispatch(gotUser({}));
     socket.emit("logout", id);
   } catch (error) {

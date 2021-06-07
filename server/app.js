@@ -22,17 +22,16 @@ app.use(urlencoded({ extended: false }));
 app.use(express.static(join(__dirname, "public")));
 
 app.use(cookieParser())
-app.use(session({ secret: process.env.SESSION_SECRET }))
+app.use(session({secret: process.env.SESSION_SECRET}))
 
 const csrfProtection = csrf({
-  cookie: true,
-  ignoreMethods: []
+  cookie: true
 });
+module.exports = csrfProtection
 
 app.use(csrfProtection);
-
 app.use(function (req, res, next) {
-  const token = req.cookies.token;
+const token = req.cookies.token;
   if (token) {
     jwt.verify(token, process.env.SESSION_SECRET, (err, decoded) => {
       if (err) {
@@ -52,8 +51,6 @@ app.use(function (req, res, next) {
 
 // require api routes here after I create them
 app.use("/auth", require("./routes/auth"));
-
-
 app.use("/api", require("./routes/api"));
 
 // catch 404 and forward to error handler
