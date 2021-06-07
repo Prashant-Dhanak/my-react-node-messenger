@@ -6,8 +6,10 @@ import {
   Box,
   Typography,
   TextField,
+  FilledInput,
 } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
+import InputAdornment from '@material-ui/core/InputAdornment';
 import { login } from "./store/utils/thunkCreators";
 import SignTemplate from './SignTemplate'
 
@@ -15,9 +17,6 @@ import SignTemplate from './SignTemplate'
 const useStyles = makeStyles((theme) => ({
   paper: {
     margin: theme.spacing(8, 4),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
   },
   form: {
     width: '100%', // Fix IE 11 issue.
@@ -31,10 +30,15 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
     backgroundColor: '#3A8DFF',
     width: '50%',
-    fontFamily: 'sans-serif',
+    fontFamily: 'Open Sans',
   },
-  sansSerif: {
-    fontFamily: 'sans-serif',
+  openSans: {
+    fontFamily: 'Open Sans',
+  },
+  textField: {
+    "& label span": {
+      display:"none",
+    }
   },
 }));
 
@@ -57,29 +61,28 @@ const Login = (props) => {
 
   return (
 <SignTemplate>
-        <div className={classes.paper}>
-          <Box width="75%" textAlign="right">
-            <Typography className={classes.sansSerif} >Don’t have an account?
-              <Button
+
+          <Box textAlign="right" position="end" fullWidth className={classes.paper}>
+            <Button className={classes.openSans} disabled >Don’t have an account?</Button>
+            <Button
                 style={{
                   backgroundColor: "white",
                   padding: "18px 36px",
                   color: "#3A8DFF",
                   margin: 20,
                 }}
-                className={classes.sansSerif}
+                className={classes.openSans}
                 variant="contained"
                 size="large"
                 onClick={() => history.push("/register")}>
                 Create Account
               </Button>
-            </Typography>
           </Box>
-        </div>
+
 
 
         <Box className={classes.form} width="75%" textAlign="left">
-          <Typography variant="h4" fontWeight="fontWeightBold" className={classes.sansSerif}>
+          <Typography variant="h4"  className={classes.openSans}>
             Welcome back!
           </Typography>
 
@@ -89,10 +92,11 @@ const Login = (props) => {
 
           <Box width="75%">
             <TextField
+              className={classes.textField}
               margin="normal"
               required
               aria-label="username"
-              label="Username"
+              label="E-mail address"
               fullWidth
               autoFocus
               name="username"
@@ -101,14 +105,16 @@ const Login = (props) => {
           </Box>
           <Box width="75%">
             <TextField
+              className={classes.textField}
               margin="normal"
               required
+              // endAdornment={<Button position="end">Kg</Button>}
               fullWidth
-              label="password"
+              label="Password"
               aria-label="password"
               type="password"
-              name="password"
-            />
+              name="password">
+              </TextField>
 
           </Box>
 

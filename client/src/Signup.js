@@ -16,9 +16,6 @@ import SignTemplate from './SignTemplate'
 const useStyles = makeStyles((theme) => ({
   paper: {
     margin: theme.spacing(8, 4),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
   },
   form: {
     width: '100%', // Fix IE 11 issue.
@@ -32,11 +29,16 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
     backgroundColor: '#3A8DFF',
     width: '50%',
-    fontFamily: 'sans-serif',
+    fontFamily: 'Open Sans',
   },
-  sansSerif: {
-    fontFamily: 'sans-serif',
+  openSans: {
+    fontFamily: 'Open Sans',
   },
+  textField: {
+    "& label span": {
+      display:"none",
+    }
+  }
 }));
 
 const Login = (props) => {
@@ -50,13 +52,6 @@ const Login = (props) => {
     const username = event.target.username.value;
     const email = event.target.email.value;
     const password = event.target.password.value;
-    const confirmPassword = event.target.confirmPassword.value;
-
-    if (password !== confirmPassword) {
-      setFormErrorMessage({ confirmPassword: "Passwords must match" });
-      return;
-    }
-
     await register({ username, email, password });
   };
 
@@ -66,29 +61,26 @@ const Login = (props) => {
 
   return (
     <SignTemplate>
-      <div className={classes.paper}>
-        <Box width="75%" textAlign="right">
-          <Typography className={classes.sansSerif} >Need to log in?
-              <Button
-              style={{
-                backgroundColor: "white",
-                padding: "18px 72px",
-                color: "#3A8DFF",
-                margin: 20,
-              }}
-              className={classes.sansSerif}
-              variant="contained"
-              size="large"
-              onClick={() => history.push("/login")}>
-              Login
-              </Button>
-          </Typography>
+        <Box textAlign="right" position="end" fullWidth className={classes.paper}>
+          <Button className={classes.openSans} disabled>Already have an account?</Button>
+          <Button
+            style={{
+              backgroundColor: "white",
+              padding: "18px 72px",
+              color: "#3A8DFF",
+              margin: 20,
+            }}
+            className={classes.openSans}
+            variant="contained"
+            size="large"
+            onClick={() => history.push("/login")}>
+            Login
+          </Button>
         </Box>
-      </div>
 
 
       <Box className={classes.form} width="75%" textAlign="left">
-        <Typography variant="h4" fontWeight="fontWeightBold" className={classes.sansSerif}>
+        <Typography variant="h4" fontWeight="fontWeightBold" className={classes.openSans}>
           Create an account.
           </Typography>
 
@@ -98,6 +90,7 @@ const Login = (props) => {
 
         <Box width="75%">
           <TextField
+            className={classes.textField}
             margin="normal"
             required
             aria-label="username"
@@ -111,6 +104,7 @@ const Login = (props) => {
 
         <Box width="75%">
           <TextField
+            className={classes.textField}
             margin="normal"
             required
             aria-label="e-mail address"
@@ -122,40 +116,18 @@ const Login = (props) => {
         </Box>
 
         <Box width="75%">
-          <FormControl fullWidth error={!!formErrorMessage.confirmPassword}>
             <TextField
+              className={classes.textField}
               margin="normal"
               required
               fullWidth
-              label="password"
+              label="Password"
               inputProps={{ minLength: 6 }}
               aria-label="password"
               type="password"
               name="password"
             />
-            <FormHelperText>
-              {formErrorMessage.confirmPassword}
-            </FormHelperText>
-          </FormControl>
-        </Box>
-
-        <Box width="75%">
-          <FormControl fullWidth error={!!formErrorMessage.confirmPassword}>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              label="Confirm Password"
-              aria-label="confirm password"
-              type="password"
-              inputProps={{ minLength: 6 }}
-              name="confirmPassword"
-            />
-            <FormHelperText>
-              {formErrorMessage.confirmPassword}
-            </FormHelperText>
-          </FormControl>
-        </Box>
+          </Box>
 
         <Box width="75%" textAlign="center">
           <Button
