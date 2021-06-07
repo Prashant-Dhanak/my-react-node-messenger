@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import { Box } from "@material-ui/core";
+import { Box, Badge } from "@material-ui/core";
 import { BadgeAvatar, ChatContent } from "../Sidebar";
 import { withStyles } from "@material-ui/core/styles";
 import { setActiveChat } from "../../store/activeConversation";
 import { connect } from "react-redux";
+import { updateLastRead } from "../../store/utils/thunkCreators";
 
 const styles = {
   root: {
@@ -27,6 +28,13 @@ class Chat extends Component {
   render() {
     const { classes } = this.props;
     const otherUser = this.props.conversation.otherUser;
+    await this.props.updateLastRead({
+      userId: this.props.user.id,
+      recipientId: this.props.conversation.otherUser.id,
+      lastRead: this.props.conversation.otherUserLastMessageId,
+      conversationId: this.props.conversation.id,
+      totalUnRead: this.props.conversation.totalUnRead
+    })
     return (
       <Box
         onClick={() => this.handleClick(this.props.conversation)}
@@ -39,17 +47,31 @@ class Chat extends Component {
           sidebar={true}
         />
         <ChatContent conversation={this.props.conversation} />
+
+        <Badge badgeContent={this.props.conversation.totalUnRead} color="primary">
+
+        </Badge>
+
       </Box>
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    user: state.user,
+  };
+};
 
 const mapDispatchToProps = (dispatch) => {
   return {
     setActiveChat: (id) => {
       dispatch(setActiveChat(id));
     },
+    updateLastRead: (updateData) => {
+      dispatch(updateLastRead(updateData))
+    }
   };
 };
 
-export default connect(null, mapDispatchToProps)(withStyles(styles)(Chat));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Chat));
