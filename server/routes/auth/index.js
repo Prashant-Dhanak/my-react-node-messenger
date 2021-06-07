@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const { User } = require("../../db/models");
 const jwt = require("jsonwebtoken");
-const csrfProtection = require("../../app")
 
 router.post("/register", async (req, res, next) => {
   try {
@@ -34,7 +33,6 @@ router.post("/register", async (req, res, next) => {
     req.send = { ...user.dataValues }
     res.json({
       ...user.dataValues,
-      csrfToken: csrf,
       // token,
     });
     next()
@@ -47,12 +45,11 @@ router.post("/register", async (req, res, next) => {
   }
 });
 
-router.post("/login", csrfProtection, async (req, res, next) => {
+router.post("/login", async (req, res, next) => {
   try {
 
     const csrf = req.csrfToken()
     console.log(csrf)
-
     // expects username and password in req.body
     const { username, password } = req.body;
     if (!username || !password)
@@ -80,7 +77,6 @@ router.post("/login", csrfProtection, async (req, res, next) => {
       req.send = { ...user.dataValues }
       res.json({
         ...user.dataValues,
-        csrfToken: csrf,
         // token,
       });
     }

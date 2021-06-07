@@ -23,12 +23,11 @@ app.use(express.static(join(__dirname, "public")));
 
 app.use(cookieParser())
 app.use(session({ secret: process.env.SESSION_SECRET }))
-// app.use(csrf({cookie:true}))
 
 const csrfProtection = csrf({
-  cookie: true
+  cookie: true,
+  ignoreMethods: []
 });
-module.exports = csrfProtection
 
 app.use(csrfProtection);
 
@@ -51,7 +50,6 @@ app.use(function (req, res, next) {
   }
 });
 
-app.use(csrfProtection);
 // require api routes here after I create them
 app.use("/auth", require("./routes/auth"));
 
