@@ -6,23 +6,19 @@ import {
   Box,
   Typography,
   TextField,
-  FilledInput,
+  InputAdornment,
 } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
-import InputAdornment from '@material-ui/core/InputAdornment';
 import { login } from "./store/utils/thunkCreators";
 import SignTemplate from './SignTemplate'
 
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    margin: theme.spacing(8, 4),
+    paddingTop: '10%',
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-    marginLeft: theme.spacing(10),
-    marginRight: theme.spacing(10),
+    margin: '5%'
   },
   submit: {
     padding: "18px 36px",
@@ -31,13 +27,14 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#3A8DFF',
     width: '50%',
     fontFamily: 'Open Sans',
+    fontWeight: 'bold',
   },
   openSans: {
     fontFamily: 'Open Sans',
   },
   textField: {
     "& label span": {
-      display:"none",
+      display: "none",
     }
   },
 }));
@@ -60,37 +57,36 @@ const Login = (props) => {
   }
 
   return (
-<SignTemplate>
+    <SignTemplate>
 
-          <Box textAlign="right" position="end" fullWidth className={classes.paper}>
-            <Button className={classes.openSans} disabled >Don’t have an account?</Button>
-            <Button
-                style={{
-                  backgroundColor: "white",
-                  padding: "18px 36px",
-                  color: "#3A8DFF",
-                  margin: 20,
-                }}
-                className={classes.openSans}
-                variant="contained"
-                size="large"
-                onClick={() => history.push("/register")}>
-                Create Account
-              </Button>
-          </Box>
+      <Box textAlign="right" position="end" width="100%">
+        <Button className={classes.openSans} disabled >Don’t have an account?</Button>
+        <Button
+          style={{
+            backgroundColor: "white",
+            padding: "18px 36px",
+            color: "#3A8DFF",
+            margin: 20,
+          }}
+          className={classes.openSans}
+          variant="contained"
+          size="large"
+          onClick={() => history.push("/register")}>
+          Create Account
+        </Button>
+      </Box>
 
 
-
-        <Box className={classes.form} width="75%" textAlign="left">
-          <Typography variant="h4"  className={classes.openSans}>
+      <Box className={classes.paper}>
+        <Box className={classes.form} width="90%" textAlign="left">
+          <Typography variant="h4" className={classes.openSans} style={{ fontWeight: "bold", }}>
             Welcome back!
           </Typography>
-
         </Box>
 
         <form onSubmit={handleLogin} className={classes.form}>
 
-          <Box width="75%">
+          <Box width="90%">
             <TextField
               className={classes.textField}
               margin="normal"
@@ -100,25 +96,27 @@ const Login = (props) => {
               fullWidth
               autoFocus
               name="username"
-              type="text"
-            />
+              type="text" />
           </Box>
-          <Box width="75%">
+
+          <Box width="90%">
             <TextField
               className={classes.textField}
               margin="normal"
               required
+              InputProps={{
+                endAdornment: <Button position="end" style={{ color: "#3A8DFF", }}>Forgot?</Button>,
+              }}
               // endAdornment={<Button position="end">Kg</Button>}
               fullWidth
               label="Password"
               aria-label="password"
               type="password"
               name="password">
-              </TextField>
-
+            </TextField>
           </Box>
 
-          <Box width="75%" textAlign="center">
+          <Box width="90%" textAlign="center">
             <Button
               type="submit"
               variant="contained"
@@ -131,7 +129,9 @@ const Login = (props) => {
           </Box>
 
         </form>
-</SignTemplate>
+
+      </Box>
+    </SignTemplate>
   );
 };
 
