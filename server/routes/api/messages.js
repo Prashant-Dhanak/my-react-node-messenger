@@ -28,8 +28,9 @@ router.post("/", async (req, res, next) => {
         sender.online = true;
       }
     }
+    let message = null
     if (conversationId == conversation.id) {
-      const message = await Message.create({
+       message = await Message.create({
         senderId,
         text,
         conversationId: conversation.id,
