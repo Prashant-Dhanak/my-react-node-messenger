@@ -20,16 +20,16 @@ const styles = {
 };
 
 const Chat = (props) => {
-  const { classes } = props;
-  const otherUser = props.conversation.otherUser;
+  const { classes, conversation } = props;
+  const { otherUser } = conversation;
 
-  const handleClick = async (props) => {
-    await props.setActiveChat(props.conversation.otherUser.username);
+  const handleClick = async (username) => {
+    await props.setActiveChat(username);
   };
 
   return (
     <Box
-      onClick={() => handleClick(props)}
+      onClick={() => handleClick(otherUser.username)}
       className={classes.root}
     >
       <BadgeAvatar
@@ -38,7 +38,7 @@ const Chat = (props) => {
         online={otherUser.online}
         sidebar={true}
       />
-      <ChatContent conversation={props.conversation} />
+      <ChatContent conversation={conversation} />
     </Box>
   );
 
