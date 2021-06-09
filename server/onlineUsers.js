@@ -1,7 +1,2 @@
-const onlineUsers = [];
-onlineUsersSocketID = []
-module.exports = 
-{
-    onlineUsers,
-    onlineUsersSocketID
-};
+const onlineUsers = {};
+module.exports = onlineUsers;
