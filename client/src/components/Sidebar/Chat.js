@@ -4,7 +4,6 @@ import { BadgeAvatar, ChatContent } from "../Sidebar";
 import { withStyles } from "@material-ui/core/styles";
 import { setActiveChat } from "../../store/activeConversation";
 import { connect } from "react-redux";
-import { updateLastRead } from "../../store/utils/thunkCreators";
 
 const styles = {
   root: {
@@ -23,19 +22,12 @@ const styles = {
 class Chat extends Component {
   handleClick = async (conversation) => {
     await this.props.setActiveChat(conversation.otherUser.username);
-    await this.props.updateLastRead({
-      userId: this.props.user.id,
-      recipientId: this.props.conversation.otherUser.id,
-      lastRead: this.props.conversation.otherUserLastMessageId,
-      conversationId: this.props.conversation.id,
-      totalUnRead: this.props.conversation.totalUnRead
-    })
   };
 
   render() {
     const { classes } = this.props;
     const otherUser = this.props.conversation.otherUser;
-    
+
     return (
       <Box
         onClick={() => this.handleClick(this.props.conversation)}
@@ -49,9 +41,7 @@ class Chat extends Component {
         />
         <ChatContent conversation={this.props.conversation} />
 
-        <Badge badgeContent={this.props.conversation.totalUnRead} color="primary">
-
-        </Badge>
+        <Badge badgeContent={this.props.conversation.totalUnRead} color="primary" />
 
       </Box>
     );
@@ -69,9 +59,6 @@ const mapDispatchToProps = (dispatch) => {
     setActiveChat: (id) => {
       dispatch(setActiveChat(id));
     },
-    updateLastRead: (updateData) => {
-      dispatch(updateLastRead(updateData))
-    }
   };
 };
 

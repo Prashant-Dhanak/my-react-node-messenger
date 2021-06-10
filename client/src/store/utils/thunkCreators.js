@@ -114,7 +114,7 @@ export const searchUsers = (searchTerm) => async (dispatch) => {
 
 export const updateLastRead = (data) => async (dispatch) => {
   if (data.totalUnRead > 0) {
-    axios.post("/api/conversations/updateLastRead", data);
+    axios.put("/api/conversations/updateLastRead", data);
+    dispatch(updateLastReadState(data))
   }
-  dispatch(updateLastReadState(data))
 }

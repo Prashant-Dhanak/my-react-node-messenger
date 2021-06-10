@@ -76,7 +76,7 @@ router.get("/", async (req, res, next) => {
 
       messages.forEach(message => {
         if (message.id > lastRead && message.senderId == convoJSON['otherUser']['id']) {
-          otherUserLastMessageId > message.id ? null : otherUserLastMessageId = message.id;
+          otherUserLastMessageId = otherUserLastMessageId > message.id ? otherUserLastMessageId : message.id;
           totalUnRead += 1;
         }
       });
@@ -87,6 +87,7 @@ router.get("/", async (req, res, next) => {
       convoJSON.messages.reverse()
       convoJSON.latestMessageText = convoJSON.messages[convoJSON.messages.length - 1].text;
       conversations[i] = convoJSON;
+      // console.log(convoJSON)
     }
 
     res.json(conversations);
@@ -95,17 +96,26 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.post("/updateLastRead", async (req, res, next) => {
+router.put("/updateLastRead", async (req, res, next) => {
+  const { userId, recipientId, lastRead, conversationId } = req.body
   // Performs check that the request is validator, for security purpose.
-  if (req.user.id === req.body.userId) {
-    const update = Conversation.update(
-      { lastRead: req.body.lastRead },
-      { where: { id: req.body.conversationId } }
-    )
-    res.json({"success": "true"})
+  if (req.user.id === userId) {
+    let conversation = await Conversation.findConversation(
+      userId,
+      recipientId
+    );
+    console.log(conversation.lastRead + " vs " + lastRead)
+    console.log(conversation.id + " vs " + conversationId)
+    if (conversation.lastRead < lastRead) {
+      Conversation.update(
+        { lastRead: lastRead },
+        { where: { id: conversationId } }
+      )
+    }
+    res.json({ "success": "true" })
   }
-  else{
-    res.json({"Error": "Forbidden"})
+  else {
+    res.json({ "Error": "Forbidden" })
   }
 })
 
