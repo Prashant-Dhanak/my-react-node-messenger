@@ -14,6 +14,12 @@ const newMessage = (io, data) => {
     }) : null
 }
 
+const readMessage = (io, data) => {
+  const { recipientId } = data
+  onlineUsers[recipientId] ?
+    io.to(onlineUsers[recipientId]).emit("read-message", data) : null
+}
+
 const logout = (socket, id) => {
   onlineUsers[id] ? (
     delete onlineUsers[id],
@@ -21,4 +27,4 @@ const logout = (socket, id) => {
     : null
 }
 
-module.exports = { goOnline, newMessage, logout }
+module.exports = { goOnline, newMessage, readMessage, logout }
