@@ -19,8 +19,8 @@ router.get("/", async (req, res, next) => {
           user2Id: userId,
         },
       },
-      attributes: ["id"],
-      order: [[Message, "createdAt", "DESC"]],
+      attributes: ["id", "lastRead"],
+      order: [[Message, "id", "DESC"]],
       include: [
         { model: Message, order: ["createdAt", "ASC"] },
         {
@@ -51,6 +51,10 @@ router.get("/", async (req, res, next) => {
     for (let i = 0; i < conversations.length; i++) {
       const convo = conversations[i];
       const convoJSON = convo.toJSON();
+      let totalUnRead = 0
+      let otherUserLastMessageId = 0
+      const messages = conversations[i]['messages']
+      const lastRead = conversations[i]['lastRead']
 
       // set a property "otherUser" so that frontend will have easier access
       if (convoJSON.user1) {
@@ -68,9 +72,21 @@ router.get("/", async (req, res, next) => {
         convoJSON.otherUser.online = false;
       }
 
+
+      messages.forEach(message => {
+        if (message.id > lastRead && message.senderId == convoJSON['otherUser']['id']) {
+          otherUserLastMessageId = otherUserLastMessageId > message.id ? otherUserLastMessageId : message.id;
+          totalUnRead += 1;
+        }
+      });
+      convoJSON.totalUnRead = totalUnRead
+      convoJSON.otherUserLastMessageId = otherUserLastMessageId
+
       // set properties for notification count and latest message preview
-      convoJSON.latestMessageText = convoJSON.messages[0].text;
+
       convoJSON.messages.reverse()
+      convoJSON.latestMessageText = convoJSON.messages[convoJSON.messages.length - 1].text;
+
       conversations[i] = convoJSON;
     }
 
@@ -79,5 +95,26 @@ router.get("/", async (req, res, next) => {
     next(error);
   }
 });
+
+router.put("/updateLastRead", async (req, res, next) => {
+  const { userId, recipientId, lastRead, conversationId } = req.body
+  // Performs check that the request is validator, for security purpose.
+  if (req.user.id === userId) {
+    let conversation = await Conversation.findConversation(
+      userId,
+      recipientId
+    );
+    if (conversation.lastRead < lastRead) {
+      Conversation.update(
+        { lastRead: lastRead },
+        { where: { id: conversationId } }
+      )
+    }
+    res.json({ "success": "true" })
+  }
+  else {
+    res.json({ "Error": "Forbidden" })
+  }
+})
 
 module.exports = router;

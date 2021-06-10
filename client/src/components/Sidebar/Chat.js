@@ -1,5 +1,6 @@
-import React from "react";
-import { Box } from "@material-ui/core";
+import React, { Component } from "react";
+import { Box, Badge } from "@material-ui/core";
+
 import { BadgeAvatar, ChatContent } from "../Sidebar";
 import { withStyles } from "@material-ui/core/styles";
 import { setActiveChat } from "../../store/activeConversation";
@@ -27,6 +28,7 @@ const Chat = (props) => {
     await props.setActiveChat(username);
   };
 
+
   return (
     <Box
       onClick={() => handleClick(otherUser.username)}
@@ -39,10 +41,19 @@ const Chat = (props) => {
         sidebar={true}
       />
       <ChatContent conversation={conversation} />
+        
+      <Badge badgeContent={conversation.totalUnRead} color="primary" />
+          
     </Box>
   );
 
 }
+
+const mapStateToProps = (state) => {
+  return {
+    user: state.user,
+  };
+};
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -52,4 +63,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(withStyles(styles)(Chat));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Chat));
