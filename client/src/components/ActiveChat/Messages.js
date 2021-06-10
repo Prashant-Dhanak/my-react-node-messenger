@@ -6,7 +6,7 @@ import { updateLastRead } from "../../store/utils/thunkCreators";
 import { connect } from "react-redux";
 
 const Messages = (props) => {
-  const { messages, otherUser, otherUserLastMessageId, totalUnRead } = props.conversation;
+  const { messages, otherUser, otherUserLastMessageId, totalUnRead, lastRead } = props.conversation;
   const { userId } = props
 
   useEffect(() => {
@@ -25,7 +25,7 @@ const Messages = (props) => {
         const time = moment(message.createdAt).format("h:mm");
 
         return message.senderId === userId ? (
-          <SenderBubble key={message.id} text={message.text} time={time} />
+          <SenderBubble key={message.id} id={message.id} text={message.text} time={time} otherUser={otherUser} lastRead={lastRead}/>
         ) : (
           <OtherUserBubble key={message.id} text={message.text} time={time} otherUser={otherUser} />
         );

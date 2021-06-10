@@ -2,7 +2,6 @@ const router = require("express").Router();
 const { User, Conversation, Message } = require("../../db/models");
 const { Op } = require("sequelize");
 const onlineUsers = require("../../onlineUsers");
-// const { validator } = require("sequelize/types/lib/utils/validator-extras");
 
 // get all conversations for a user, include latest message text for preview, and all messages
 // include other user model so we have info on username/profile pic (don't include current user info)
@@ -87,7 +86,6 @@ router.get("/", async (req, res, next) => {
       convoJSON.messages.reverse()
       convoJSON.latestMessageText = convoJSON.messages[convoJSON.messages.length - 1].text;
       conversations[i] = convoJSON;
-      // console.log(convoJSON)
     }
 
     res.json(conversations);
