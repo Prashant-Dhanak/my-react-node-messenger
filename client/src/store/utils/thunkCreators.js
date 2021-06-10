@@ -117,7 +117,7 @@ const readReceipt = (data) => {
 };
 
 export const updateLastRead = (data) => async (dispatch) => {
-    axios.put("/api/conversations/updateLastRead", data);
-    dispatch(updateLastReadState(data))
-    readReceipt(data)
+  axios.put("/api/conversations/updateLastRead", data);
+  dispatch(updateLastReadState(data))
+  readReceipt(data)
 }
