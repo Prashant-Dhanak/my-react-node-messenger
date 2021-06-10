@@ -1,4 +1,4 @@
-const {goOnline, newMessage, logout} = require("./socketEvents")
+const {goOnline, newMessage, readMessage, logout} = require("./socketEvents")
 
 
 const connection = function (io) {
@@ -7,6 +7,8 @@ const connection = function (io) {
     socket.on("go-online", id => goOnline(socket, id));
 
     socket.on("new-message", (data) => newMessage(io, data));
+    
+    socket.on("read-message", (data) => readMessage(io, data));
 
     socket.on("logout", (id) => logout(socket, id));
 
