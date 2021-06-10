@@ -34,7 +34,7 @@ export const fetchUser = () => async (dispatch) => {
 
 export const register = (credentials) => async (dispatch) => {
   try {
-    const csrfdata  = await axios.get("/auth/csrf-token");
+    const csrfdata = await axios.get("/auth/csrf-token");
     localStorage.setItem("csrf-token", csrfdata.data.csrfToken);
     const { data } = await axios.post("/auth/register", credentials);
     dispatch(gotUser(data));
@@ -47,7 +47,7 @@ export const register = (credentials) => async (dispatch) => {
 
 export const login = (credentials) => async (dispatch) => {
   try {
-    const csrfdata  = await axios.get("/auth/csrf-token");
+    const csrfdata = await axios.get("/auth/csrf-token");
     localStorage.setItem("csrf-token", csrfdata.data.csrfToken);
     const response = await axios.post("/auth/login", credentials);
     const data = response.data
@@ -93,7 +93,7 @@ const sendMessage = (data, body) => {
 // conversationId will be set to null if its a brand new conversation
 export const postMessage = (body) => async (dispatch) => {
   try {
-    
+
     const { data } = await axios.post("/api/messages", body)
 
     if (!body.conversationId) {
@@ -124,6 +124,5 @@ export const updateLastRead = (data) => async (dispatch) => {
   axios.put("/api/conversations/updateLastRead", data);
   dispatch(updateLastReadState(data))
   readReceipt(data)
-}
 };
 
