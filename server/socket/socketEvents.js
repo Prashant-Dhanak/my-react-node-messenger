@@ -12,7 +12,6 @@ const newMessage = (io, data) => {
       message: data.message,
       sender: data.sender,
     }) : null
-
 }
 
 const logout = (socket, id) => {
