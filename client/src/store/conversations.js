@@ -5,6 +5,7 @@ import {
   removeOfflineUserFromStore,
   addMessageToStore,
   updateLastReadToStore,
+  setReadMessageToStore,
 } from "./utils/reducerFunctions";
 
 // ACTIONS
@@ -17,6 +18,7 @@ const SET_SEARCHED_USERS = "SET_SEARCHED_USERS";
 const CLEAR_SEARCHED_USERS = "CLEAR_SEARCHED_USERS";
 const ADD_CONVERSATION = "ADD_CONVERSATION";
 const UPDATE_LAST_READ_DATA = "UPDATE_LAST_READ_DATA";
+const SET_READ_MESSAGE = "SET_READ_MESSAGE;"
 
 // ACTION CREATORS
 
@@ -76,6 +78,13 @@ export const updateLastReadState = (data) => {
   };
 }
 
+export const setReadMessage = (data) => {
+  return {
+    type: SET_READ_MESSAGE,
+    data,
+  };
+}
+
 // REDUCER
 
 const reducer = (state = [], action) => {
@@ -96,6 +105,8 @@ const reducer = (state = [], action) => {
       return state.filter((convo) => convo.id);
     case UPDATE_LAST_READ_DATA:
       return updateLastReadToStore(state, action.data);
+    case SET_READ_MESSAGE:
+      return setReadMessageToStore(state, action.data);
     case ADD_CONVERSATION:
       return addNewConvoToStore(
         state,

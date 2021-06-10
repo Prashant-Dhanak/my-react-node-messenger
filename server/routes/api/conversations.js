@@ -102,8 +102,6 @@ router.put("/updateLastRead", async (req, res, next) => {
       userId,
       recipientId
     );
-    console.log(conversation.lastRead + " vs " + lastRead)
-    console.log(conversation.id + " vs " + conversationId)
     if (conversation.lastRead < lastRead) {
       Conversation.update(
         { lastRead: lastRead },

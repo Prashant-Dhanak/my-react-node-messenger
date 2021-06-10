@@ -112,9 +112,12 @@ export const searchUsers = (searchTerm) => async (dispatch) => {
   }
 };
 
+const readReceipt = (data) => {
+  socket.emit("read-message", data);
+};
+
 export const updateLastRead = (data) => async (dispatch) => {
-  if (data.totalUnRead > 0) {
     axios.put("/api/conversations/updateLastRead", data);
     dispatch(updateLastReadState(data))
-  }
+    readReceipt(data)
 }

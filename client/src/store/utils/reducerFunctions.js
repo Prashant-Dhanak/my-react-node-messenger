@@ -99,3 +99,16 @@ export const updateLastReadToStore = (state, data) => {
     }
   });
 }
+
+export const setReadMessageToStore = (state, data) => {
+  const { lastRead, conversationId } = data
+  return state.map((convo) => {
+    if (convo.id === conversationId) {
+      const convoCopy = { ...convo };
+      convoCopy.lastRead = lastRead;
+      return convoCopy;
+    } else {
+      return convo;
+    }
+  });
+}

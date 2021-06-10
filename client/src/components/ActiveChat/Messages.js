@@ -10,22 +10,22 @@ const Messages = (props) => {
   const { userId } = props
 
   useEffect(() => {
-    props.updateLastRead({
-      userId,
-      recipientId: otherUser.id,
-      lastRead: otherUserLastMessageId,
-      conversationId: props.conversation.id,
-      totalUnRead,
-    })
+    if (totalUnRead > 0) {
+      props.updateLastRead({
+        userId,
+        recipientId: otherUser.id,
+        lastRead: otherUserLastMessageId,
+        conversationId: props.conversation.id,
+      })
+    }
   })
 
   return (
     <Box>
       {messages.map((message) => {
         const time = moment(message.createdAt).format("h:mm");
-
         return message.senderId === userId ? (
-          <SenderBubble key={message.id} id={message.id} text={message.text} time={time} otherUser={otherUser} lastRead={lastRead}/>
+          <SenderBubble key={message.id} id={message.id} text={message.text} time={time} otherUser={otherUser} lastRead={lastRead} />
         ) : (
           <OtherUserBubble key={message.id} text={message.text} time={time} otherUser={otherUser} />
         );
